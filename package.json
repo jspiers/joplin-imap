@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "joplin-api": "^0.5.1",
+    "joplin-plugin-email": "^1.0.0"
+  }
+}

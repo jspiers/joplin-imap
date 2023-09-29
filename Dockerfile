@@ -4,10 +4,10 @@
 ARG NODE_VERSION=20-bookworm-slim
 FROM node:${NODE_VERSION} as base
 FROM base as release
+WORKDIR /app
+COPY ["package.json", "package-lock.json", "./"]
+ENV NODE_ENV=production
+RUN npm install --production
+# WORKDIR /app/node_modules/joplin-plugin-email
 USER node
-COPY app.js ${HOME}/app.js
-WORKDIR ${HOME}
-# RUN npm install
-# CMD ["sleep", "infinity"]
-CMD ["node", "app.js"]
-
+CMD ["npm", "version"]
