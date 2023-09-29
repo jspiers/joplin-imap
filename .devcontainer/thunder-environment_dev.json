@@ -1,0 +1,16 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "dev",
+    "dateExported": "2023-09-29T21:56:13.765Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "JOPLIN_URL",
+            "value": "http://joplin"
+        },
+        {
+            "name": "JOPLIN_TOKEN",
+            "value": "mytoken"
+        }
+    ]
+}

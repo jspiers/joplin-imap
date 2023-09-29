@@ -1,0 +1,73 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Joplin Clipper API",
+    "dateExported": "2023-09-29T22:03:35.519Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "09233162-4750-4a1e-8d1c-ed7449ab2929",
+            "colId": "004eb11e-d142-4305-a0b4-5754d293c179",
+            "containerId": "",
+            "name": "Ping",
+            "url": "{{JOPLIN_URL}}/ping",
+            "method": "GET",
+            "sortNum": 7500,
+            "created": "2023-09-29T22:02:43.692Z",
+            "modified": "2023-09-29T22:02:43.692Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "15e855b4-a255-438e-9d67-1dcc2f34d8c2",
+            "colId": "004eb11e-d142-4305-a0b4-5754d293c179",
+            "containerId": "",
+            "name": "Get Folders",
+            "url": "{{JOPLIN_URL}}/folders?token={{JOPLIN_TOKEN}}&page=1",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2023-09-29T22:02:43.693Z",
+            "modified": "2023-09-29T22:02:43.693Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "token",
+                    "value": "{{JOPLIN_TOKEN}}",
+                    "isPath": false
+                },
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "85cf3364-2b4c-44ef-b2e6-62c14d312dba",
+            "colId": "004eb11e-d142-4305-a0b4-5754d293c179",
+            "containerId": "",
+            "name": "Post Note (Hello world)",
+            "url": "{{JOPLIN_URL}}/notes?token={{JOPLIN_TOKEN}}",
+            "method": "POST",
+            "sortNum": 17500,
+            "created": "2023-09-29T22:02:43.691Z",
+            "modified": "2023-09-29T22:02:43.691Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "token",
+                    "value": "{{JOPLIN_TOKEN}}",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\"body\":\"Hello world from Jeff\\r\\n\",\"title\":\"Hello world\",\"user_created_time\":\"1695486568000\"}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

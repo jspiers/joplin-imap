@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  joplin: &joplin
+    image: jspiers/headless-joplin:latest
+    expose:
+      - 80
+    volumes:
+      - data:/home/node/.config/joplin
+      - sync:/sync
+    secrets:
+      - joplin-config.json
+    restart: unless-stopped
+    networks:
+      - joplin
+
+  imap:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      JOPLIN_IMAP_DEBUG: "true"
+      JOPLIN_URL: http://joplin
+      JOPLIN_TOKEN: ${JOPLIN_TOKEN:-mytoken}
+      JOPLIN_NOTEBOOK: go-imap-joplin
+      IMAP_SERVER: ${IMAP_SERVER?}
+      IMAP_USERNAME: ${IMAP_USERNAME?}
+      IMAP_PASSWORD: ${IMAP_PASSWORD?}
+      IMAP_MAILBOX: ${IMAP_MAILBOX:-INBOX}
+      IMAP_MAX_POLL_INTERVAL_SECONDS: ${IMAP_MAX_POLL_INTERVAL_SECONDS:-300}
+    depends_on:
+      joplin:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - joplin
+      - public
+
+volumes:
+  data: {}
+  sync: {}
+
+secrets:
+  joplin-config.json:
+    file: ./joplin-config.empty.json
+
+networks:
+  joplin:
+    internal: true
+  public: {}
