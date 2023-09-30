@@ -1,0 +1,3 @@
+[submodule "joplin-utils"]
+	path = joplin-utils
+	url = git@github.com:rxliuli/joplin-utils.git
