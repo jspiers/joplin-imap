@@ -18,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NODE_VERSION: 20-bookworm
     environment:
       JOPLIN_IMAP_DEBUG: "true"
       JOPLIN_URL: http://joplin

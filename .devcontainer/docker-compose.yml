@@ -3,10 +3,7 @@ services:
   # Update this to the name of the service you want to work with in your docker-compose.yml file
   imap:
     build:
-      # context: .
       dockerfile: .devcontainer/Dockerfile
-      args:
-        NODE_VERSION: 20-bookworm
 
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
