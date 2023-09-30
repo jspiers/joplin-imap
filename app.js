@@ -15,9 +15,14 @@
 
 import { config, noteApi, folderApi } from 'joplin-api'
 
+// configure joplin-api
 config.baseUrl = process.env.JOPLIN_URL
 config.token = process.env.JOPLIN_TOKEN
+
+// get folders
 const folders = await folderApi.list()
 console.log("Folders:", folders)
+
+// get notes
 const notes = await noteApi.list()
 console.log("Notes:", notes)
