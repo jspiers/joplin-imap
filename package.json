@@ -14,9 +14,7 @@
   "keywords": [
     "joplin",
     "imap",
-    "node",
-    "notes",
-    "docker"
+    "email"
   ],
   "author": "Jeffrey Spiers",
   "license": "BSD-3-Clause",
