@@ -13,4 +13,11 @@
 //   console.log(`Server running at http://${hostname}:${port}/`);
 // });
 
-console.log("hello world");
+import { config, noteApi, folderApi } from 'joplin-api'
+
+config.baseUrl = process.env.JOPLIN_URL
+config.token = process.env.JOPLIN_TOKEN
+const folders = await folderApi.list()
+console.log("Folders:", folders)
+const notes = await noteApi.list()
+console.log("Notes:", notes)
