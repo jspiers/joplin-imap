@@ -2,7 +2,7 @@
   "type": "module",
   "name": "joplin-imap",
   "description": "Docker container to enable email-to-note from an IMAP email account to [Joplin](https://github.com/laurent22/joplin/) via its [Data API](https://joplinapp.org/api/references/rest_api/)",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,12 +19,13 @@
     "docker"
   ],
   "author": "Jeffrey Spiers",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/jspiers/joplin-imap/issues"
   },
   "homepage": "https://github.com/jspiers/joplin-imap#readme",
   "dependencies": {
     "joplin-api": "^0.5.1"
-  }
+  },
+  "private": true
 }
