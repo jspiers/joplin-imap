@@ -23,5 +23,7 @@
   },
   "homepage": "https://github.com/jspiers/joplin-imap#readme",
   "private": true,
-  "devDependencies": {}
+  "dependencies": {
+    "joplin-api": "^0.5.1"
+  }
 }
