@@ -1,18 +1,26 @@
 version: '3.8'
 
 services:
-  joplin: &joplin
+  joplin:
     image: jspiers/headless-joplin:latest
     expose:
       - 80
     volumes:
       - data:/home/node/.config/joplin
-      - sync:/sync
+      # - sync:/sync
     secrets:
       - joplin-config.json
-    restart: unless-stopped
+    restart: no # for debugging
     networks:
       - joplin
+
+  otherjoplin:
+    image: gri38/joplin-terminal-xapi:latest
+    restart: no # for debugging
+    volumes:
+      - otherdata:/root/.config/joplin
+    networks:
+      - otherjoplin
 
   imap:
     build:
@@ -24,7 +32,7 @@ services:
       JOPLIN_IMAP_DEBUG: "true"
       JOPLIN_URL: http://joplin
       JOPLIN_TOKEN: ${JOPLIN_TOKEN:-mytoken}
-      JOPLIN_NOTEBOOK: go-imap-joplin
+      JOPLIN_NOTEBOOK: ${COMPOSE_PROJECT_NAME?}
       IMAP_SERVER: ${IMAP_SERVER?}
       IMAP_USERNAME: ${IMAP_USERNAME?}
       IMAP_PASSWORD: ${IMAP_PASSWORD?}
@@ -36,17 +44,21 @@ services:
     restart: unless-stopped
     networks:
       - joplin
+      - otherjoplin
       - public
 
 volumes:
   data: {}
-  sync: {}
+  otherdata: {}
+  # sync: {}
 
 secrets:
   joplin-config.json:
-    file: ./joplin-config.empty.json
+    file: ./joplin-config.json
 
 networks:
   joplin:
+    internal: true
+  otherjoplin:
     internal: true
   public: {}
