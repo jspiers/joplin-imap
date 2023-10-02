@@ -2,27 +2,69 @@ version: '3.8'
 
 services:
   joplin:
-    image: jspiers/headless-joplin:latest
+    image: jspiers/headless-joplin:2.12.1-node-18.18.0
     expose:
       - 80
     volumes:
-      - data:/home/node/.config/joplin
+      - joplin-data:/home/node/.config/joplin
       # - sync:/sync
     secrets:
       - joplin-config.json
-    restart: no # for debugging
     networks:
       - joplin
-
-  otherjoplin:
-    image: gri38/joplin-terminal-xapi:latest
+    # override healthcheck interval until start-interval is implemented (in moby v25)
+    healthcheck:
+      interval: 5s
     restart: no # for debugging
+
+  # Check out the joplin-utils git repo and run joplin-api tests
+  # against the API port of the 'joplin' container
+  utils:
+    build:
+      additional_contexts:
+        github: https://github.com/rxliuli/joplin-utils.git#master
+      dockerfile_inline: |
+        FROM node:20-bookworm
+        RUN apt update -y && apt install -y --no-install-recommends \
+          neovim \
+          direnv
+        RUN npm install -g pnpm
+        RUN mkdir -p /work/joplin-utils
+        WORKDIR /work/joplin-utils
+        COPY --from=github . .
+        RUN pnpm i
+        RUN pnpm pnpm setup-all
+    environment:
+      JOPLIN_TOKEN: ${JOPLIN_TOKEN:-mytoken}
+      JOPLIN_URL: http://joplin
+    # Create .env.local file expected by "pnpm test" command, then run it
+    command:
+      - bash
+      - -ec
+      - |
+        cat << EOF > .env.local
+        URL=$${JOPLIN_URL}
+        TOKEN=$${JOPLIN_TOKEN}
+        EOF
+        while true
+        do
+          pnpm test
+          sleep 60
+        done
+    working_dir: /work/joplin-utils/packages/joplin-api
     volumes:
-      - otherdata:/root/.config/joplin
+      - /home/jeff/.bashrc:/root/.bashrc:ro
     networks:
-      - otherjoplin
+      - joplin
+      - public
+    depends_on:
+      joplin:
+        condition: service_healthy
+    restart: no # for debugging
 
   imap:
+    profiles:
+      - imap
     build:
       context: .
       dockerfile: Dockerfile
@@ -44,12 +86,10 @@ services:
     restart: unless-stopped
     networks:
       - joplin
-      - otherjoplin
       - public
 
 volumes:
-  data: {}
-  otherdata: {}
+  joplin-data: {}
   # sync: {}
 
 secrets:
@@ -58,7 +98,5 @@ secrets:
 
 networks:
   joplin:
-    internal: true
-  otherjoplin:
     internal: true
   public: {}
