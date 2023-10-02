@@ -22,7 +22,8 @@ services:
   utils:
     build:
       additional_contexts:
-        github: https://github.com/rxliuli/joplin-utils.git#master
+        # github: https://github.com/rxliuli/joplin-utils.git#master
+        github: https://github.com/rxliuli/joplin-utils.git#9a052287088217715b00c87212005732b0bee2e9
       dockerfile_inline: |
         FROM node:20-bookworm
         RUN apt update -y && apt install -y --no-install-recommends \
