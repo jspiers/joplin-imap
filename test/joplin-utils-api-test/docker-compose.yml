@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+
+  # Run the Joplin clipper server API in a container
+  joplin:
+    image: jspiers/headless-joplin:2.12.1-node-18.18.0
+    expose:
+      - 80
+    volumes:
+      - joplin-data:/home/node/.config/joplin
+    networks:
+      - joplin
+    # Override healthcheck interval until start-interval is implemented (in moby v25)
+    healthcheck:
+      interval: 5s
+    restart: no # for debugging
+
+  # Check out the joplin-utils git repo and run joplin-api tests
+  # against the API port of the 'joplin' container
+  utils:
+    build:
+      additional_contexts:
+        # Specify a ref (branch, tag, sha) after the '#'
+        github: https://github.com/rxliuli/joplin-utils.git#9a052287088217715b00c87212005732b0bee2e9
+      dockerfile_inline: |
+        FROM node:20-bookworm
+        RUN npm install -g --omit=dev pnpm && npm cache clean --force
+        WORKDIR /home/node/joplin-utils
+        RUN chown node:node ./
+        USER node
+        COPY --chown=node:node --from=github . .
+        # Install joplin-utils according to https://github.com/rxliuli/joplin-utils/issues/61#issuecomment-1296123464
+        RUN pnpm i
+        RUN pnpm pnpm setup-all
+    working_dir: /home/node/joplin-utils/packages/joplin-api
+    environment:
+      JOPLIN_URL: http://joplin
+      JOPLIN_TOKEN: ${JOPLIN_TOKEN:-mytoken}
+    # Create .env.local file expected by "pnpm test" command, then run it
+    command:
+      - bash
+      - -ec
+      - |
+        cat << EOF > .env.local
+        URL=$${JOPLIN_URL}
+        TOKEN=$${JOPLIN_TOKEN}
+        EOF
+        while true
+        do
+          pnpm test
+          sleep 60
+        done
+    networks:
+      - joplin
+    depends_on:
+      joplin:
+        condition: service_healthy
+    restart: no # for debugging
+
+volumes:
+  joplin-data: {}
+
+networks:
+  joplin:
+    internal: true
