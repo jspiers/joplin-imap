@@ -34,7 +34,7 @@ services:
         COPY --chown=node:node --from=github . .
         # Install joplin-utils according to https://github.com/rxliuli/joplin-utils/issues/61#issuecomment-1296123464
         RUN pnpm i
-        RUN pnpm pnpm setup-all
+        RUN pnpm setup-all
     working_dir: /home/node/joplin-utils/packages/joplin-api
     environment:
       JOPLIN_URL: http://joplin

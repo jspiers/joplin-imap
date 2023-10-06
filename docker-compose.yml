@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   joplin:
-    image: jspiers/headless-joplin:2.12.1-node-20.8.0
+    image: jspiers/headless-joplin:2.12.1-node-18.18.0
     expose:
       - 80
     volumes:
